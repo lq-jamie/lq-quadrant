@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LQ Go-To-Market Quadrant</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0a0a0f;
+      color: #e8e8f0;
+      min-height: 100vh;
+      padding: 40px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #ffffff;
+    }
+    .subtitle {
+      text-align: center;
+      color: #888;
+      font-size: 0.9rem;
+      margin-bottom: 32px;
+    }
+    .chart-container {
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .chart {
+      position: relative;
+      width: 100%;
+      padding-bottom: 65%;
+      background: #111118;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #222;
+    }
+    .chart-inner {
+      position: absolute;
+      inset: 40px 40px 40px 60px;
+    }
+    .quadrant-grid {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+    }
+    .quadrant {
+      border: 1px solid #1e1e2a;
+      display: flex;
+      flex-direction: column;
+      padding: 12px;
+      position: relative;
+    }
+    .quadrant-tl { border-right: none; border-bottom: none; background: rgba(139, 92, 246, 0.04); }
+    .quadrant-tr { border-bottom: none; background: rgba(59, 130, 246, 0.04); }
+    .quadrant-bl { border-right: none; background: rgba(16, 185, 129, 0.04); }
+    .quadrant-br { background: rgba(245, 158, 11, 0.04); }
+    .quadrant-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #666;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .quadrant-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #ccc;
+    }
+    /* Axes */
+    .x-axis {
+      position: absolute;
+      bottom: 20px;
+      left: 60px;
+      right: 40px;
+      height: 1px;
+      background: #333;
+    }
+    .x-axis::before {
+      content: 'TRUST →';
+      position: absolute;
+      right: -50px;
+      top: -8px;
+      font-size: 0.7rem;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .y-axis {
+      position: absolute;
+      left: 40px;
+      top: 40px;
+      bottom: 40px;
+      width: 1px;
+      background: #333;
+    }
+    .y-axis::after {
+      content: 'BUDGET →';
+      position: absolute;
+      left: -52px;
+      top: 50%;
+      transform: rotate(-90deg) translateX(50%);
+      transform-origin: left center;
+      font-size: 0.7rem;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+    .axis-label-low {
+      position: absolute;
+      font-size: 0.65rem;
+      color: #444;
+      text-transform: uppercase;
+    }
+    .x-low { bottom: 4px; left: 60px; }
+    .x-high { bottom: 4px; right: 40px; }
+    .y-high { top: 44px; left: 10px; }
+    .y-low { bottom: 4px; left: 10px; }
+
+    /* Items */
+    .items { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+    .item {
+      background: rgba(255,255,255,0.06);
+      border-radius: 6px;
+      padding: 7px 10px;
+      font-size: 0.72rem;
+      line-height: 1.4;
+      border-left: 3px solid;
+    }
+    .item-icp { border-color: #ef4444; }
+    .item-product { border-color: #22c55e; }
+    .item-product::before { content: '► '; font-size: 0.5rem; opacity: 0.6; }
+
+    /* ICPs */
+    .icp-tag {
+      display: inline-block;
+      font-size: 0.6rem;
+      padding: 1px 5px;
+      border-radius: 3px;
+      margin-right: 4px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+    .icp-a { background: rgba(139, 92, 246, 0.25); color: #a78bfa; }
+    .icp-b { background: rgba(59, 130, 246, 0.25); color: #60a5fa; }
+    .icp-c { background: rgba(16, 185, 129, 0.25); color: #34d399; }
+    .icp-d { background: rgba(245, 158, 11, 0.25); color: #fbbf24; }
+    .icp-e { background: rgba(236, 72, 153, 0.25); color: #f472b6; }
+
+    .legend {
+      max-width: 900px;
+      margin: 24px auto 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 24px;
+      justify-content: center;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      color: #888;
+    }
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    .legend-icp .legend-dot { background: #ef4444; }
+    .legend-product .legend-dot { background: #22c55e; }
+
+    .note {
+      max-width: 900px;
+      margin: 24px auto 0;
+      background: #111118;
+      border: 1px solid #222;
+      border-radius: 8px;
+      padding: 16px 20px;
+    }
+    .note-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #666;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    .note p {
+      font-size: 0.8rem;
+      color: #999;
+      line-height: 1.6;
+    }
+    .note strong { color: #ccc; }
+
+    @media (max-width: 600px) {
+      body { padding: 20px 10px; }
+      h1 { font-size: 1.3rem; }
+      .chart-inner { inset: 30px 20px 30px 40px; }
+      .item { font-size: 0.65rem; padding: 5px 7px; }
+      .quadrant-title { font-size: 0.75rem; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>LQ Go-To-Market: Trust × Budget Quadrant</h1>
+<p class="subtitle">Mapping ICPs and menu offerings by engagement dynamics</p>
+
+<div class="chart-container">
+  <div class="chart">
+    <div class="chart-inner">
+      <div class="quadrant-grid">
+        <!-- TL: High Budget, Low Trust = unknown/skeptical -->
+        <div class="quadrant quadrant-tl">
+          <div class="quadrant-label">Top-Left</div>
+          <div class="quadrant-title">High Budget, Low Trust</div>
+          <div class="items">
+            <div class="item item-icp"><span class="icp-tag icp-b">ICP-B</span> Traditional In-House — needs proof before spending</div>
+            <div class="item item-icp"><span class="icp-tag icp-d">ICP-D</span> Legacy Law Firm — slow, political decisions</div>
+          </div>
+          <div style="margin-top:auto; padding-top:6px;">
+            <div class="item item-product"><span class="icp-tag icp-b" style="background:rgba(59,130,246,0.15);color:#60a5fa;">Menu</span> Tool-Limit Push — prove the gap within their stack</div>
+            <div class="item item-product"><span class="icp-tag icp-b" style="background:rgba(59,130,246,0.15);color:#60a5fa;">Menu</span> Board Demo Sprint — low-risk proof of concept</div>
+          </div>
+        </div>
+        <!-- TR: High Budget, High Trust = the prize -->
+        <div class="quadrant quadrant-tr">
+          <div class="quadrant-label">Top-Right</div>
+          <div class="quadrant-title">High Budget, High Trust</div>
+          <div class="items">
+            <div class="item item-icp"><span class="icp-tag icp-a">ICP-A</span> Innovation-Hungry In-House — the beachhead</div>
+            <div class="item item-icp"><span class="icp-tag icp-c">ICP-C</span> AI-Curious Law Firm — partners, not firms</div>
+            <div class="item item-icp"><span class="icp-tag icp-e">ICP-E</span> Solo/Small-Team GC — fast decisions, consumption model</div>
+          </div>
+          <div style="margin-top:auto; padding-top:6px;">
+            <div class="item item-product"><span class="icp-tag icp-a" style="background:rgba(139,92,246,0.15);color:#a78bfa;">Menu</span> Champion Accelerator — the upsell from sprint</div>
+            <div class="item item-product"><span class="icp-tag icp-a" style="background:rgba(139,92,246,0.15);color:#a78bfa;">Menu</span> Oscar-Style Per-Consumption — full function take-over</div>
+            <div class="item item-product"><span class="icp-tag icp-a" style="background:rgba(139,92,246,0.15);color:#a78bfa;">Menu</span> Co-Design Production Tools — embed and build</div>
+          </div>
+        </div>
+        <!-- BL: Low Budget, Low Trust = hard to reach -->
+        <div class="quadrant quadrant-bl">
+          <div class="quadrant-label">Bottom-Left</div>
+          <div class="quadrant-title">Low Budget, Low Trust</div>
+          <div class="items">
+            <div class="item item-icp" style="color:#555;font-size:0.68rem;">No natural ICP lives here — avoid this quadrant</div>
+          </div>
+        </div>
+        <!-- BR: Low Budget, High Trust = network effect zone -->
+        <div class="quadrant quadrant-br">
+          <div class="quadrant-label">Bottom-Right</div>
+          <div class="quadrant-title">Low Budget, High Trust</div>
+          <div class="items">
+            <div class="item item-icp"><span class="icp-tag icp-a">ICP-A</span> via community/hackathon — relationship first</div>
+            <div class="item item-icp"><span class="icp-tag icp-c">ICP-C</span> via LQ network referrals</div>
+          </div>
+          <div style="margin-top:auto; padding-top:6px;">
+            <div class="item item-product"><span class="icp-tag icp-e" style="background:rgba(236,72,153,0.15);color:#f472b6;">Menu</span> Open Cohort — peer learning, low commitment</div>
+            <div class="item item-product"><span class="icp-tag icp-e" style="background:rgba(236,72,153,0.15);color:#f472b6;">Menu</span> Async + Live Sprint — flexible, remote-friendly</div>
+            <div class="item item-product"><span class="icp-tag icp-e" style="background:rgba(236,72,153,0.15);color:#f472b6;">Menu</span> Guided Sprints / Hackathons — awareness & trust building</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Axes -->
+    <div class="x-axis"></div>
+    <div class="y-axis"></div>
+    <div class="axis-label-low x-low">Low</div>
+    <div class="axis-label-low x-high">High</div>
+    <div class="axis-label-low y-high">High</div>
+    <div class="axis-label-low y-low">Low</div>
+  </div>
+</div>
+
+<div class="legend">
+  <div class="legend-item legend-icp"><div class="legend-dot"></div> ICPs (Ideal Customer Profiles)</div>
+  <div class="legend-item legend-product"><div class="legend-dot"></div> Menu offerings</div>
+</div>
+
+<div class="note">
+  <div class="note-title">The Strategic Picture</div>
+  <p>
+    <strong>Beachhead: ICP-A (top-right).</strong> These clients move fast, have budget, and are already asking the right questions. The Board Demo Sprint is the entry point — low commitment, real artifact, immediate board-level win. Champion Accelerator is the follow-on. Everything else requires trust that hasn't been earned yet.
+    <br><br>
+    <strong>Volume play: ICP-E (bottom-right).</strong> Solo GCs make fast decisions and pay for consumption. Oscar-style delivery works here with minimal trust-building overhead. Low budget but low friction.
+    <br><br>
+    <strong>Long game: ICP-B and ICP-D (top-left).</strong> High budget but skeptical. The Tool-Limit Push earns trust by working inside their existing stack and demonstrating the gap. Slow, but meaningful when they convert.
+  </p>
+</div>
+
+</body>
+</html>
