@@ -3,335 +3,559 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LQ Go-To-Market: Trust x Budget Quadrant</title>
+  <title>LQ GTM: Trust x Budget — Engagement Decision Map</title>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: #0a0a0f;
       color: #e8e8f0;
-      padding: 32px 20px;
+      padding: 28px 16px;
       min-height: 100vh;
+      line-height: 1.5;
     }
-
     .page { max-width: 960px; margin: 0 auto; }
 
-    h1 {
-      text-align: center;
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 6px;
-    }
-    .subtitle {
-      text-align: center;
-      color: #777;
-      font-size: 0.85rem;
-      margin-bottom: 28px;
-    }
+    h1 { text-align: center; font-size: 1.5rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
+    .subtitle { text-align: center; color: #666; font-size: 0.8rem; margin-bottom: 24px; }
 
-    /* --- Chart --- */
+    /* ── Banner ── */
+    .banner {
+      background: rgba(139,92,246,0.12);
+      border: 1px solid rgba(139,92,246,0.3);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      font-size: 0.78rem;
+      color: #c4b5fd;
+    }
+    .banner strong { color: #a78bfa; }
+
+    /* ── Phase 0: Self-Check ── */
+    .phase-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #555;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    .phase-num {
+      background: rgba(139,92,246,0.2);
+      color: #a78bfa;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 0.6rem;
+    }
+    .self-check {
+      background: #111118;
+      border: 1px solid #1e1e2a;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .self-check-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #bbb;
+      margin-bottom: 10px;
+    }
+    .check-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 8px;
+    }
+    .check-item {
+      background: rgba(255,255,255,0.04);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 0.72rem;
+      color: #888;
+      border-left: 3px solid #333;
+    }
+    .check-item.yes { border-left-color: #22c55e; color: #86efac; }
+    .check-item.no  { border-left-color: #ef4444; color: #fca5a5; }
+    .check-item.meh { border-left-color: #f59e0b; color: #fcd34d; }
+
+    /* ── Chart ── */
     .chart {
       background: #111118;
-      border: 1px solid #222;
+      border: 1px solid #1a1a24;
       border-radius: 12px;
       overflow: visible;
       margin-bottom: 20px;
     }
-
-    /* Y-axis label */
-    .y-label {
-      position: relative;
+    .y-label-row {
+      display: flex;
+      align-items: center;
       height: 20px;
-      margin-left: 56px;
+      margin-left: 52px;
       margin-bottom: 4px;
     }
-    .y-label span {
-      position: absolute;
-      left: 0;
-      top: 0;
-      font-size: 0.65rem;
+    .y-label-row span {
+      font-size: 0.62rem;
       color: #555;
       text-transform: uppercase;
       letter-spacing: 0.06em;
       writing-mode: vertical-rl;
       transform: rotate(180deg);
     }
-
-    /* Grid: 2x2, with row/col headers */
     .grid {
       display: grid;
-      grid-template-columns: 56px 1fr 1fr;
+      grid-template-columns: 52px 1fr 1fr;
       grid-template-rows: auto 1fr 1fr auto;
-      min-height: 420px;
+      min-height: 380px;
     }
-
-    /* Y-axis column */
-    .y-axis {
-      grid-column: 1;
-      grid-row: 2 / 4;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .y-axis span {
-      font-size: 0.65rem;
-      color: #555;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      writing-mode: vertical-rl;
-      transform: rotate(180deg);
-    }
-
-    /* X-axis row */
-    .x-axis {
-      grid-column: 2 / 4;
-      grid-row: 4;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 6px 0 8px;
-    }
-    .x-axis span {
-      font-size: 0.65rem;
-      color: #555;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    /* Quadrant cells */
-    .q {
-      padding: 14px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      min-height: 160px;
-    }
-    .q-label {
-      font-size: 0.6rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: #555;
-      font-weight: 600;
-    }
-    .q-title {
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: #bbb;
-      margin-bottom: 2px;
-    }
-
-    .q-tl { grid-column: 2; grid-row: 2; background: rgba(139,92,246,0.05); border-right: 1px solid #1e1e2a; border-bottom: 1px solid #1e1e2a; }
-    .q-tr { grid-column: 3; grid-row: 2; background: rgba(59,130,246,0.05); border-bottom: 1px solid #1e1e2a; }
-    .q-bl { grid-column: 2; grid-row: 3; background: rgba(16,185,129,0.04); border-right: 1px solid #1e1e2a; }
-    .q-br { grid-column: 3; grid-row: 3; background: rgba(245,158,11,0.04); }
-
-    /* Axis extremes */
     .axis-extreme {
       display: flex;
       align-items: center;
-      font-size: 0.6rem;
-      color: #444;
+      font-size: 0.58rem;
+      color: #3a3a4a;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
-    .extreme-tl { grid-column: 2; grid-row: 1; justify-content: flex-start; padding: 4px 0 0 12px; color: #444; }
-    .extreme-tr { grid-column: 3; grid-row: 1; justify-content: flex-end; padding: 4px 12px 0 0; color: #666; }
-    .extreme-bl { grid-column: 2; grid-row: 4; justify-content: flex-start; padding: 0 0 0 12px; color: #666; }
-    .extreme-br { grid-column: 3; grid-row: 4; justify-content: flex-end; padding: 0 12px 0 0; color: #444; }
+    .extreme-tl { grid-column: 2; grid-row: 1; justify-content: flex-start; padding: 4px 0 0 12px; }
+    .extreme-tr { grid-column: 3; grid-row: 1; justify-content: flex-end; padding: 4px 12px 0 0; }
+    .extreme-bl { grid-column: 2; grid-row: 4; justify-content: flex-start; padding: 0 0 6px 12px; }
+    .extreme-br { grid-column: 3; grid-row: 4; justify-content: flex-end; padding: 0 12px 6px 0; }
+    .y-axis { grid-column: 1; grid-row: 2/4; display: flex; align-items: center; justify-content: center; }
+    .y-axis span { font-size: 0.62rem; color: #555; text-transform: uppercase; writing-mode: vertical-rl; transform: rotate(180deg); letter-spacing: 0.06em; }
+    .x-axis { grid-column: 2/4; grid-row: 4; display: flex; align-items: center; justify-content: center; padding: 6px 0 8px; }
+    .x-axis span { font-size: 0.62rem; color: #555; text-transform: uppercase; letter-spacing: 0.06em; }
 
-    /* Items */
+    .q { padding: 12px 10px; display: flex; flex-direction: column; gap: 4px; min-height: 150px; }
+    .q-tl { grid-column: 2; grid-row: 2; background: rgba(139,92,246,0.04); border-right: 1px solid #1a1a24; border-bottom: 1px solid #1a1a24; }
+    .q-tr { grid-column: 3; grid-row: 2; background: rgba(59,130,246,0.04); border-bottom: 1px solid #1a1a24; }
+    .q-bl { grid-column: 2; grid-row: 3; background: rgba(16,185,129,0.03); border-right: 1px solid #1a1a24; }
+    .q-br { grid-column: 3; grid-row: 3; background: rgba(245,158,11,0.04); }
+
+    .q-label { font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.1em; color: #444; font-weight: 700; }
+    .q-title { font-size: 0.75rem; font-weight: 600; color: #aaa; margin-bottom: 2px; }
+
     .items { display: flex; flex-direction: column; gap: 4px; flex: 1; }
     .item {
-      background: rgba(255,255,255,0.05);
+      background: rgba(255,255,255,0.04);
       border-radius: 5px;
       padding: 5px 8px;
-      font-size: 0.68rem;
+      font-size: 0.66rem;
       line-height: 1.45;
       border-left: 3px solid;
     }
     .item-icp { border-color: #ef4444; }
     .item-product { border-color: #22c55e; }
-    .item-product::before { content: '\25b6 '; font-size: 0.5em; opacity: 0.5; }
+    .item-product::before { content: '\25b6 '; font-size: 0.5em; opacity: 0.45; }
     .icp-tag {
       display: inline-block;
-      font-size: 0.58rem;
-      padding: 0px 4px;
+      font-size: 0.57rem;
+      padding: 0 3px;
       border-radius: 3px;
       margin-right: 4px;
       font-weight: 700;
-      letter-spacing: 0.03em;
     }
-    .icp-a { background: rgba(139,92,246,0.22); color: #a78bfa; }
-    .icp-b { background: rgba(59,130,246,0.22); color: #60a5fa; }
-    .icp-c { background: rgba(16,185,129,0.22); color: #34d399; }
-    .icp-d { background: rgba(245,158,11,0.22); color: #fbbf24; }
-    .icp-e { background: rgba(236,72,153,0.22); color: #f472b6; }
+    .icp-a { background: rgba(139,92,246,0.2); color: #a78bfa; }
+    .icp-b { background: rgba(59,130,246,0.2); color: #60a5fa; }
+    .icp-c { background: rgba(16,185,129,0.2); color: #34d399; }
+    .icp-e { background: rgba(236,72,153,0.2); color: #f472b6; }
     .menu-tag {
       font-size: 0.55rem;
-      padding: 0px 4px;
+      padding: 0 3px;
       border-radius: 3px;
       margin-right: 4px;
       font-weight: 700;
     }
-    .section-title {
-      font-size: 0.58rem;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      color: #555;
-      margin-top: 2px;
-    }
-    .q-divider {
-      border: none;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      margin: 4px 0;
-    }
+    .section-title { font-size: 0.57rem; text-transform: uppercase; letter-spacing: 0.07em; color: #3a3a4a; margin-top: 2px; }
+    .q-divider { border: none; border-top: 1px solid rgba(255,255,255,0.05); margin: 3px 0; }
 
-    /* Legend */
-    .legend {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
+    /* ── Contracts ── */
+    .contracts {
       margin-bottom: 20px;
     }
-    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; color: #777; }
-    .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
-    .legend-icp .legend-dot { background: #ef4444; }
-    .legend-product .legend-dot { background: #22c55e; }
-
-    /* Note */
-    .note {
-      background: #111118;
-      border: 1px solid #1e1e2a;
-      border-radius: 8px;
-      padding: 16px 18px;
-    }
-    .note-title {
-      font-size: 0.68rem;
+    .contracts-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.65rem;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
       color: #555;
       margin-bottom: 10px;
       font-weight: 600;
     }
-    .note p {
-      font-size: 0.76rem;
-      color: #888;
-      line-height: 1.65;
-      margin-bottom: 8px;
+    .contract-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 10px;
     }
-    .note p:last-child { margin-bottom: 0; }
-    .note strong { color: #aaa; }
-    .note hr { border: none; border-top: 1px solid #1e1e2a; margin: 10px 0; }
+    .contract {
+      background: #111118;
+      border: 1px solid #1a1a24;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .contract-header {
+      padding: 10px 12px;
+      border-bottom: 1px solid #1a1a24;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .contract-name { font-size: 0.75rem; font-weight: 600; color: #ccc; }
+    .contract-price { font-size: 0.7rem; color: #a78bfa; font-weight: 600; }
+    .contract-body { padding: 10px 12px; }
+    .contract-field { margin-bottom: 6px; }
+    .contract-field:last-child { margin-bottom: 0; }
+    .contract-field-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.07em; color: #444; margin-bottom: 2px; font-weight: 600; }
+    .contract-field-value { font-size: 0.7rem; color: #888; }
+    .stop-conditions {
+      background: rgba(239,68,68,0.06);
+      border-top: 1px solid rgba(239,68,68,0.15);
+      padding: 8px 12px;
+      font-size: 0.65rem;
+      color: #f87171;
+    }
+    .stop-conditions strong { text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.58rem; }
+
+    /* ── Handoff ── */
+    .handoff {
+      background: rgba(139,92,246,0.06);
+      border: 1px solid rgba(139,92,246,0.2);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .handoff-title {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #a78bfa;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+    .handoff-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 8px;
+    }
+    .handoff-step {
+      background: rgba(255,255,255,0.03);
+      border-radius: 6px;
+      padding: 8px 10px;
+    }
+    .handoff-step-num {
+      font-size: 0.58rem;
+      color: #a78bfa;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 3px;
+      font-weight: 700;
+    }
+    .handoff-step-title { font-size: 0.72rem; color: #ccc; font-weight: 600; margin-bottom: 3px; }
+    .handoff-step-desc { font-size: 0.66rem; color: #666; }
+
+    /* ── Rules file ── */
+    .rules {
+      background: #111118;
+      border: 1px solid #1a1a24;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .rules-title {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #555;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 8px;
+    }
+    .rule {
+      background: rgba(255,255,255,0.03);
+      border-radius: 5px;
+      padding: 8px 10px;
+      font-size: 0.7rem;
+      color: #888;
+    }
+    .rule strong { color: #bbb; }
+
+    /* ── PACT box ── */
+    .pact {
+      background: #111118;
+      border: 1px solid #1a1a24;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .pact-title {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #555;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+    .pact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 8px;
+    }
+    .pact-item {
+      background: rgba(255,255,255,0.03);
+      border-radius: 5px;
+      padding: 8px 10px;
+    }
+    .pact-letter {
+      font-size: 1rem;
+      font-weight: 800;
+      color: rgba(139,92,246,0.6);
+      margin-bottom: 3px;
+    }
+    .pact-name { font-size: 0.72rem; color: #bbb; font-weight: 600; margin-bottom: 3px; }
+    .pact-desc { font-size: 0.65rem; color: #666; }
+
+    /* Legend */
+    .legend { display: flex; gap: 16px; justify-content: center; margin-bottom: 16px; }
+    .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.7rem; color: #666; }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .legend-icp .legend-dot { background: #ef4444; }
+    .legend-product .legend-dot { background: #22c55e; }
+    .legend-contract .legend-dot { background: #a78bfa; }
 
     @media (max-width: 580px) {
-      .q { padding: 10px 8px; min-height: 130px; }
-      .q-title { font-size: 0.7rem; }
+      body { padding: 16px 10px; }
+      h1 { font-size: 1.2rem; }
+      .q { padding: 8px; min-height: 130px; }
       .item { font-size: 0.62rem; }
-      h1 { font-size: 1.25rem; }
-      .grid { min-height: 360px; }
+      .grid { min-height: 340px; }
     }
   </style>
 </head>
 <body>
 <div class="page">
 
-  <h1>LQ Go-To-Market: Trust x Budget</h1>
-  <p class="subtitle">X-axis = trust in LQ &nbsp;|&nbsp; Y-axis = budget &nbsp;|&nbsp; Top-right is where deals close</p>
+<h1>LQ GTM: Engagement Decision Map</h1>
+<p class="subtitle">X-axis = trust in LQ &nbsp;|&nbsp; Y-axis = budget &nbsp;|&nbsp; Start with Phase 0</p>
 
-  <div class="chart">
-    <div class="grid">
+<!-- Phase 0: Self-Check -->
+<div class="phase-label"><span class="phase-num">Phase 0</span> Before picking an engagement — answer these</div>
+<div class="self-check">
+  <div class="self-check-title">Answer honestly. Your answers determine which quadrant you start from.</div>
+  <div class="check-grid">
+    <div class="check-item yes">You have a named internal champion (GC, legal ops, or a partner)</div>
+    <div class="check-item yes">The GC has tried to show the board something AI-related in the last 6 months</div>
+    <div class="check-item meh">You have an existing relationship with someone at the firm or company</div>
+    <div class="check-item no">This is a cold outreach / RFP situation</div>
+  </div>
+  <div style="margin-top:10px;font-size:0.7rem;color:#555;">→ 3–4 yes = top-right. 2–3 yes = likely top-right, check ICP. Mixed = top-left. 3–4 no = bottom-left (not ready).</div>
+</div>
 
-      <!-- Axis labels -->
-      <div class="extreme-tl axis-extreme">Low</div>
-      <div class="extreme-tr axis-extreme">High</div>
-      <div class="extreme-bl axis-extreme">Low</div>
-      <div class="extreme-br axis-extreme">High</div>
+<!-- Chart -->
+<div class="chart">
+  <div class="grid">
 
-      <!-- Y axis -->
-      <div class="y-axis"><span>Budget</span></div>
+    <div class="axis-extreme extreme-tl">Low</div>
+    <div class="axis-extreme extreme-tr">High</div>
+    <div class="axis-extreme extreme-bl">Low</div>
+    <div class="axis-extreme extreme-br">High</div>
 
-      <!-- X axis -->
-      <div class="x-axis"><span>Trust in LQ</span></div>
+    <div class="y-axis"><span>Budget</span></div>
+    <div class="x-axis"><span>Trust in LQ</span></div>
 
-      <!-- TL: High Budget, Low Trust -->
-      <div class="q q-tl">
-        <div class="q-label">Top-Left</div>
-        <div class="q-title">High Budget, Low LQ Trust</div>
-        <div class="items">
-          <div class="item item-icp"><span class="icp-tag icp-b">ICP-B</span> Traditional In-House — never heard of LQ, skeptical of vendors</div>
-          <div class="item item-icp"><span class="icp-tag icp-d">ICP-D</span> Legacy Law Firm — no community connection, slow decisions</div>
-        </div>
-        <hr class="q-divider">
-        <div class="section-title">Menu</div>
-        <div class="items">
-          <div class="item item-product"><span class="menu-tag" style="background:rgba(59,130,246,0.15);color:#60a5fa;">Menu</span> Tool-Limit Push — earn trust inside their stack</div>
-          <div class="item item-product"><span class="menu-tag" style="background:rgba(59,130,246,0.15);color:#60a5fa;">Menu</span> Board Demo Sprint — low-risk first contact</div>
-        </div>
+    <!-- TL: High Budget, Low Trust -->
+    <div class="q q-tl">
+      <div class="q-label">Top-Left</div>
+      <div class="q-title">High Budget, Low LQ Trust</div>
+      <div class="items">
+        <div class="item item-icp"><span class="icp-tag icp-b">ICP-B</span> Traditional In-House — never heard of LQ</div>
+        <div class="item item-icp" style="font-size:0.62rem;color:#555;margin-top:2px;">Cold outreach, skeptical of all vendors. CFO controls the purse.</div>
       </div>
-
-      <!-- TR: High Budget, High Trust -->
-      <div class="q q-tr">
-        <div class="q-label">Top-Right</div>
-        <div class="q-title">High Budget, High LQ Trust</div>
-        <div class="items">
-          <div class="item item-icp"><span class="icp-tag icp-a">ICP-A</span> Innovation-Hungry In-House — in the WhatsApp group</div>
-          <div class="item item-icp"><span class="icp-tag icp-c">ICP-C</span> AI-Curious Law Firm — met LQ members at events</div>
-          <div class="item item-icp"><span class="icp-tag icp-e">ICP-E</span> Solo/Small-Team GC — referred by LQ network</div>
-        </div>
-        <hr class="q-divider">
-        <div class="section-title">Menu</div>
-        <div class="items">
-          <div class="item item-product"><span class="menu-tag" style="background:rgba(139,92,246,0.15);color:#a78bfa;">Menu</span> Champion Accelerator — natural upsell</div>
-          <div class="item item-product"><span class="menu-tag" style="background:rgba(139,92,246,0.15);color:#a78bfa;">Menu</span> Oscar-Style Per-Consumption — full function take-over</div>
-          <div class="item item-product"><span class="menu-tag" style="background:rgba(139,92,246,0.15);color:#a78bfa;">Menu</span> Co-Design Production Tools — trusted embed</div>
-        </div>
+      <hr class="q-divider">
+      <div class="section-title">Start here</div>
+      <div class="items">
+        <div class="item item-product"><span class="menu-tag" style="background:rgba(59,130,246,0.12);color:#60a5fa;">Menu</span> Board Demo Sprint — your foot in the door</div>
       </div>
+    </div>
 
-      <!-- BL: Low Budget, Low Trust -->
-      <div class="q q-bl">
-        <div class="q-label">Bottom-Left</div>
-        <div class="q-title">Low Budget, Low LQ Trust</div>
-        <div class="items">
-          <div class="item item-icp" style="color:#444;font-size:0.66rem;">Nothing useful lives here. Avoid.</div>
-        </div>
+    <!-- TR: High Budget, High Trust — BEACHHEAD -->
+    <div class="q q-tr" style="border: 1px solid rgba(139,92,246,0.3); border-radius:8px; margin:-1px;">
+      <div class="q-label" style="color:#a78bfa;">Top-Right — BEACHHEAD</div>
+      <div class="q-title">High Budget, High LQ Trust</div>
+      <div class="items">
+        <div class="item item-icp"><span class="icp-tag icp-a">ICP-A</span> In the WhatsApp group, knows LQ personally</div>
+        <div class="item item-icp"><span class="icp-tag icp-c">ICP-C</span> AI-Curious Law Firm — met LQ at events</div>
+        <div class="item item-icp"><span class="icp-tag icp-e">ICP-E</span> Solo GC — referred by LQ network</div>
       </div>
-
-      <!-- BR: Low Budget, High Trust -->
-      <div class="q q-br">
-        <div class="q-label">Bottom-Right</div>
-        <div class="q-title">Low Budget, High LQ Trust</div>
-        <div class="items">
-          <div class="item item-icp"><span class="icp-tag icp-a">Future ICP-A</span> Community followers — not yet decision-makers</div>
-          <div class="item item-icp"><span class="icp-tag icp-e">Referrals</span> LQ members who connect others but lack budget</div>
-        </div>
-        <hr class="q-divider">
-        <div class="section-title">Menu</div>
-        <div class="items">
-          <div class="item item-product"><span class="menu-tag" style="background:rgba(236,72,153,0.15);color:#f472b6;">Menu</span> Open Cohort — peer learning, low commitment</div>
-          <div class="item item-product"><span class="menu-tag" style="background:rgba(236,72,153,0.15);color:#f472b6;">Menu</span> Async + Live Sprint — flexible, remote</div>
-          <div class="item item-product"><span class="menu-tag" style="background:rgba(236,72,153,0.15);color:#f472b6;">Menu</span> Guided Sprints / Hackathons — expand trust map</div>
-        </div>
+      <hr class="q-divider">
+      <div class="section-title">Menu</div>
+      <div class="items">
+        <div class="item item-product"><span class="menu-tag" style="background:rgba(139,92,246,0.12);color:#a78bfa;">Menu</span> Board Demo Sprint — entry engagement</div>
+        <div class="item item-product"><span class="menu-tag" style="background:rgba(139,92,246,0.12);color:#a78bfa;">Menu</span> Champion Accelerator — upsell</div>
+        <div class="item item-product"><span class="menu-tag" style="background:rgba(139,92,246,0.12);color:#a78bfa;">Menu</span> Oscar-Style Per-Consumption</div>
+        <div class="item item-product"><span class="menu-tag" style="background:rgba(139,92,246,0.12);color:#a78bfa;">Menu</span> Co-Design Production Tools</div>
       </div>
+    </div>
 
+    <!-- BL: Nothing -->
+    <div class="q q-bl">
+      <div class="q-label">Bottom-Left</div>
+      <div class="q-title">Low Budget, Low LQ Trust</div>
+      <div class="items">
+        <div class="item item-icp" style="color:#3a3a4a;font-size:0.65rem;">Nothing useful here. Don't engage until trust or budget changes.</div>
+      </div>
+    </div>
+
+    <!-- BR: Network / Future -->
+    <div class="q q-br">
+      <div class="q-label">Bottom-Right</div>
+      <div class="q-title">Low Budget, High LQ Trust</div>
+      <div class="items">
+        <div class="item item-icp"><span class="icp-tag icp-a">Future ICP-A</span> Community followers, digest readers</div>
+        <div class="item item-icp"><span class="icp-tag icp-e">Referrals</span> LQ members who connect others</div>
+      </div>
+      <hr class="q-divider">
+      <div class="section-title">Menu</div>
+      <div class="items">
+        <div class="item item-product"><span class="menu-tag" style="background:rgba(236,72,153,0.12);color:#f472b6;">Menu</span> Open Cohort — peer learning</div>
+        <div class="item item-product"><span class="menu-tag" style="background:rgba(236,72,153,0.12);color:#f472b6;">Menu</span> Async + Live Sprint</div>
+        <div class="item item-product"><span class="menu-tag" style="background:rgba(236,72,153,0.12);color:#f472b6;">Menu</span> Guided Sprints — expand trust map</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="legend">
+  <div class="legend-item legend-icp"><div class="legend-dot"></div> ICPs</div>
+  <div class="legend-item legend-product"><div class="legend-dot"></div> Menu offerings</div>
+  <div class="legend-item legend-contract"><div class="legend-dot"></div> Contracts &amp; workflow</div>
+</div>
+
+<!-- Engagement Contracts -->
+<div class="contracts">
+  <div class="contracts-title">
+    <span class="phase-num">Phase 1</span>
+    Lock a contract before starting — every engagement needs one
+  </div>
+  <div class="contract-grid">
+
+    <div class="contract">
+      <div class="contract-header">
+        <span class="contract-name">Board Demo Sprint</span>
+        <span class="contract-price">USD 20–30K</span>
+      </div>
+      <div class="contract-body">
+        <div class="contract-field"><div class="contract-field-label">Objective</div><div class="contract-field-value">2–3 working prototypes the GC can show the board</div></div>
+        <div class="contract-field"><div class="contract-field-label">Acceptance</div><div class="contract-field-value">Artifacts run on real data. Not slides.</div></div>
+        <div class="contract-field"><div class="contract-field-label">Non-goals</div><div class="contract-field-value">Production-grade code, security review</div></div>
+        <div class="contract-field"><div class="contract-field-label">Done when</div><div class="contract-field-value">Client can screenshot and demo unassisted</div></div>
+      </div>
+      <div class="stop-conditions"><strong>Stop if:</strong> Champion loses interest mid-week. No one from client team is available to build. It becomes a vendor demo, not a collaborative build.</div>
+    </div>
+
+    <div class="contract">
+      <div class="contract-header">
+        <span class="contract-name">Champion Accelerator</span>
+        <span class="contract-price">USD 50–70K</span>
+      </div>
+      <div class="contract-body">
+        <div class="contract-field"><div class="contract-field-label">Objective</div><div class="contract-field-value">One production-adjacent tool + client's team can build the next one</div></div>
+        <div class="contract-field"><div class="contract-field-label">Acceptance</div><div class="contract-field-value">Tool deployed in staging. Client's champion explains how it works.</div></div>
+        <div class="contract-field"><div class="contract-field-label">Non-goals</div><div class="contract-field-value">Full production security review. Ongoing maintenance SLA.</div></div>
+        <div class="contract-field"><div class="contract-field-label">Done when</div><div class="contract-field-value">Client's team ships next tool feature without LQ involvement</div></div>
+      </div>
+      <div class="stop-conditions"><strong>Stop if:</strong> Client can't dedicate a consistent lead for 6+ weeks. Tool hits a hard IT constraint that can't be worked around.</div>
+    </div>
+
+    <div class="contract">
+      <div class="contract-header">
+        <span class="contract-name">LQ Academy Cohort</span>
+        <span class="contract-price">USD 5–15K / head</span>
+      </div>
+      <div class="contract-body">
+        <div class="contract-field"><div class="contract-field-label">Objective</div><div class="contract-field-value">Credentialed lawyers who can vibe code at production-adjacent level</div></div>
+        <div class="contract-field"><div class="contract-field-label">Acceptance</div><div class="contract-field-value">Each participant ships one working tool. Pass/fail on functionality.</div></div>
+        <div class="contract-field"><div class="contract-field-label">Non-goals</div><div class="contract-field-value">Guaranteed hires. Long-term engagement.</div></div>
+        <div class="contract-field"><div class="contract-field-label">Done when</div><div class="contract-field-value">Participant can explain their tool's architecture to an engineer</div></div>
+      </div>
+      <div class="stop-conditions"><strong>Stop if:</strong> Participant org won't let them share context. No time commitment from participants. Cohort below minimum size.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Handoff Packet -->
+<div class="handoff">
+  <div class="handoff-title">Every sprint ends with a handoff packet — this is the actual product</div>
+  <div class="handoff-grid">
+    <div class="handoff-step">
+      <div class="handoff-step-num">Step 1</div>
+      <div class="handoff-step-title">Change summary</div>
+      <div class="handoff-step-desc">What was built and why. One paragraph the GC can paste into a board deck.</div>
+    </div>
+    <div class="handoff-step">
+      <div class="handoff-step-num">Step 2</div>
+      <div class="handoff-step-title">File inventory</div>
+      <div class="handoff-step-desc">Exact files touched. Blast radius. What breaks if you delete it.</div>
+    </div>
+    <div class="handoff-step">
+      <div class="handoff-step-num">Step 3</div>
+      <div class="handoff-step-title">Test evidence</div>
+      <div class="handoff-step-desc">Before/after. What was verified. What wasn't.</div>
+    </div>
+    <div class="handoff-step">
+      <div class="handoff-step-num">Step 4</div>
+      <div class="handoff-step-title">Risk + rollback</div>
+      <div class="handoff-step-desc">What could go wrong in production. How to roll back in 2 commands.</div>
     </div>
   </div>
+</div>
 
-  <div class="legend">
-    <div class="legend-item legend-icp"><div class="legend-dot"></div> ICPs</div>
-    <div class="legend-item legend-product"><div class="legend-dot"></div> Menu offerings</div>
+<!-- Rules File -->
+<div class="rules">
+  <div class="rules-title">LQ build rules — these apply to every engagement</div>
+  <div class="rules-grid">
+    <div class="rule"><strong>No vibe coding auth.</strong> Review every line that touches authentication, tokens, or permissions.</div>
+    <div class="rule"><strong>Environment variables only.</strong> Never hardcode API keys, client names, or secrets in shipped code.</div>
+    <div class="rule"><strong>Max 500 lines per file.</strong> If a file grows beyond 500 lines, flag it for refactor (James C rule).</div>
+    <div class="rule"><strong>Error handling from day one.</strong> Every function has a defined failure mode before it goes to demo.</div>
+    <div class="rule"><strong>One feature = one change set.</strong> Don't mix behavior change with style cleanup in the same sprint.</div>
+    <div class="rule"><strong>Data never leaves the client's environment</strong> unless explicitly agreed and documented in the contract.</div>
   </div>
+</div>
 
-  <div class="note">
-    <div class="note-title">The Strategic Picture</div>
-    <p><strong>LQ's real moat is the trust network.</strong> Harvey, Norm, and every other legal AI vendor can't buy what you've built in this community — years of shared reputation, personal relationships, WhatsApp conversations, and hackathon credibility. That's the asymmetric advantage.</p>
-    <hr>
-    <p><strong>Beachhead: top-right.</strong> ICP-A, C, E with high LQ trust are warm leads. Board Demo Sprint is the natural first engagement — low risk, real artifact. Champion Accelerator, Oscar-style, and Co-Design follow as trust deepens.</p>
-    <hr>
-    <p><strong>Expansion: top-left.</strong> ICP-B and ICP-D have budget but no LQ trust yet. Board Demo Sprint plants the seed — low-commitment, gets you in the door. Then earn trust from inside their environment before pitching anything bigger.</p>
-    <hr>
-    <p><strong>Network effect: bottom-right.</strong> Community followers, digest readers, LQ members who refer — these are your referral nodes. Hackathons, Open Cohort, and Async Sprints expand the trust map outward.</p>
+<!-- PACT Protocol -->
+<div class="pact">
+  <div class="pact-title">Before every sprint: run the PACT check</div>
+  <div class="pact-grid">
+    <div class="pact-item">
+      <div class="pact-letter">P</div>
+      <div class="pact-name">Problem framing</div>
+      <div class="pact-desc">What specific workflow are you solving? What does "done" look like to the GC?</div>
+    </div>
+    <div class="pact-item">
+      <div class="pact-letter">A</div>
+      <div class="pact-name">Acceptance design</div>
+      <div class="pact-desc">Define one check that fails before and passes after. One guardrail that must stay green.</div>
+    </div>
+    <div class="pact-item">
+      <div class="pact-letter">C</div>
+      <div class="pact-name">Change set</div>
+      <div class="pact-desc">Surgical. One problem, one fix. Don't refactor adjacent code in the same sprint.</div>
+    </div>
+    <div class="pact-item">
+      <div class="pact-letter">T</div>
+      <div class="pact-name">Trace + test</div>
+      <div class="pact-desc">Show evidence. What was tested, what wasn't. Residual risk with explicit rationale.</div>
+    </div>
   </div>
+</div>
 
 </div>
 </body>
